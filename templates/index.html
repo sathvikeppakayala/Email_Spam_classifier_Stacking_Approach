@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Spam Classifier</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 50%;
+            margin: 40px auto;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        h2, h3 {
+            color: #333;
+        }
+        textarea {
+            width: 90%;
+            height: 100px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            border: none;
+            background: #007BFF;
+            color: white;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #007BFF;
+            color: white;
+        }
+        #results {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+        img {
+            width: 80%;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Email Spam Classifier</h2>
+        <form action="/classify" method="post">
+            <textarea name="email_text" placeholder="Enter email text here..."></textarea><br>
+            <button type="submit">Classify</button>
+        </form>
+        
+        {% if classification %}
+            <h3>Result: {{ classification }}</h3>
+        {% endif %}
+
+        {% if pie_chart %}
+            <h3>Spam vs Ham Distribution</h3>
+            <img src="data:image/png;base64,{{ pie_chart }}" alt="Pie Chart">
+        {% endif %}
+        
+        {% if metrics %}
+            <h3>Model Performance</h3>
+            <p>Accuracy: {{ metrics['Accuracy'] }}%</p>
+            <p>Precision: {{ metrics['Precision'] }}%</p>
+            <p>Recall: {{ metrics['Recall'] }}%</p>
+            <p>F1 Score: {{ metrics['F1 Score'] }}%</p>
+        {% endif %}
+        
+        <div id="results">
+            <h3>Tested Emails</h3>
+            <table>
+                <tr>
+                    <th>Text</th>
+                    <th>Result</th>
+                </tr>
+                {% for email in classified_emails %}
+                    <tr>
+                        <td>{{ email['Message'] }}</td>
+                        <td>{{ email['Label'] }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</body>
+</html>
